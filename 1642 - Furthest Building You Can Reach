@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int furthestBuilding(vector<int>& heights, int bricks, int ladders) {
+		int i;
+		priority_queue<int> pq;             //using max heap
+		for(i=0;i<heights.size()-1;i++)
+		{
+			int d=heights[i+1]-heights[i];    //height difference
+			if(d<=0)
+				continue;
+			if(d<=bricks)                     //if sufficient bricks are available
+			{
+				bricks=bricks-d;
+				pq.push(d);
+			}
+			else if(ladders>0)                //if ladder is available
+			{
+				if(!pq.empty()&& d<pq.top())    //if current height is less than maximum height before, we will retrieve the bricks and use it here
+				{
+					bricks=bricks+pq.top();
+					pq.pop();
+					pq.push(d);
+					bricks=bricks-d;
+				}
+				ladders--;
+			}
+			else
+				break;
+		}
+		return i;
+	}
+};
